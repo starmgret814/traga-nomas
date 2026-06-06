@@ -1,4 +1,4 @@
-export type Category = "Hamburguesass" | "Combos" | "Bebidas" | "Promociones";
+export type Category = "Hamburguesas" | "Combos" | "Bebidas" | "Promociones";
 
 export interface Extra {
   id: string;
@@ -165,24 +165,10 @@ export interface Promo {
 
 export const promos: Promo[] = [
   {
-    id: "promo-2x1",
-    tag: "Martes de locura",
-    title: "2x1 en clásicas",
-    description: "Pedí una La Clásica y la segunda corre por nuestra cuenta. Solo los martes.",
-    image: "/images/hero-burger.png",
-  },
-  {
-    id: "promo-envio",
-    tag: "Sin costo de envío",
-    title: "Envío gratis +$250",
-    description: "Arma tu pedido desde $250 y te lo llevamos sin cargo en toda la zona.",
-    image: "/images/food-combo.png",
-  },
-  {
     id: "promo-combo",
     tag: "Combo del momento",
     title: "Doble Smash + papas",
     description: "Nuestra signature con papas crujientes y bebida al mejor precio del día.",
-    image: "/images/doble-smash.png",
+    image: "/images/burger-1.webp",
   },
 ];

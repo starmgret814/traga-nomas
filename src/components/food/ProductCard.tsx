@@ -31,19 +31,19 @@ export const ProductCard = memo(function ProductCard({
       style={{ "--reveal-delay": `${revealDelay}ms` } as React.CSSProperties}
       className={cn(
         "reveal-card group relative flex flex-col overflow-hidden cursor-pointer",
-        "bg-[var(--card)] rounded-3xl border border-[var(--border)]",
-        "shadow-card hover:border-[var(--primary)]/60 hover:shadow-float hover:-translate-y-1",
+        "bg-transparent rounded-3xl border border-transparent",
+        "hover:bg-[var(--secondary)]/30 hover:border-[var(--border)] hover:-translate-y-1 transition-all duration-300",
         inView && "is-visible"
       )}
     >
       {/* Image */}
-      <div className="relative aspect-square w-full overflow-hidden bg-black">
+      <div className="relative aspect-square w-full overflow-hidden bg-black/20">
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to from-black/40 via-transparent to-transparent" />
 
         {product.badge && (
           <span
