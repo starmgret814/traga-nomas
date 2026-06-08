@@ -178,8 +178,8 @@ body {
 .hero-bg {
   background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 60%, var(--background) 100%),
-    url('/food-background.webp') no-repeat top center;
-  background-size: cover;
+    url('/main-background.png') no-repeat top center;
+  background-size: 70% auto;
 }
 
 h1,
@@ -319,4 +319,63 @@ h6 {
     transition: none;
     animation: none;
   }
+}
+
+/* Hero 3-Layer Composition */
+.hero-composition {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  /* Mantiene la proporción al escalar */
+  max-width: 500px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+@media (min-width: 1024px) {
+  .hero-composition {
+    max-width: 550px;
+    transform: translateY(20px);
+  }
+}
+
+/* Capa 2: Bandeja (Bandeja / Plato inferior) */
+.layer-tray {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  /* Ancho responsivo relativo al contenedor */
+  height: auto;
+  max-height: 45%;
+  object-fit: contain;
+  z-index: 2;
+  transition: transform 0.5s ease-out;
+}
+
+/* Capa 3: Hamburguesa / Producto (Superior) */
+.layer-foreground {
+  position: absolute;
+  bottom: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 62%;
+  /* Ancho responsivo relativo al contenedor */
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+  z-index: 3;
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.6));
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Animación y efectos de hover coordinados */
+.hero-composition:hover .layer-tray {
+  transform: translateX(-50%) translateY(4px) scale(1.02);
+}
+
+.hero-composition:hover .layer-foreground {
+  transform: translateX(-50%) translateY(-10px) scale(1.06);
+  filter: drop-shadow(0 30px 35px rgba(0, 0, 0, 0.8));
 }

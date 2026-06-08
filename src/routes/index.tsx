@@ -275,12 +275,20 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Promo of the moment */}
+            {/* Promo of the moment - Responsive 2/3-Layer Stack */}
             <a
               href="#menu"
-              className="order-1 lg:order-2 relative aspect-[3/2] w-full overflow-hidden rounded-3xl group block lg:translate-y-[100px] lg:-translate-x-[208px]"
+              className="order-1 lg:order-2 hero-composition group block"
               aria-label={`Promoción: ${activePromo.title}`}
             >
+              {/* Capa 2: Bandeja */}
+              <img
+                src="/images/food-combo.png"
+                alt="Bandeja"
+                className="layer-tray"
+              />
+
+              {/* Capa 3: Hamburguesa/Producto en promoción (rota dinámicamente) */}
               {promos.map((promo, i) => (
                 <img
                   key={promo.id}
@@ -288,16 +296,13 @@ function HomePage() {
                   alt={promo.title}
                   aria-hidden={i !== promoIndex}
                   className={cn(
-                    "absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out",
+                    "layer-foreground transition-opacity duration-700 ease-out",
                     i === promoIndex ? "opacity-100" : "opacity-0"
                   )}
                 />
               ))}
 
-              {/* Dark gradient for text legibility */}
-              <div className="absolute inset-0 from-black/90 via-black/30 to-black/10" />
-
-              <div key={activePromo.id} className="absolute inset-x-0 bottom-0 p-6 animate-fade-in">
+              <div key={activePromo.id} className="absolute inset-x-0 bottom-0 p-6 z-10 animate-fade-in">
                 <p className="font-display font-bold text-sm tracking-widest uppercase text-[var(--primary-glow)]">
                   {activePromo.tag}
                 </p>
@@ -514,3 +519,24 @@ function HomePage() {
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
