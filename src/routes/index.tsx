@@ -147,8 +147,36 @@ function HomePage() {
 
   return (
     <main className="min-h-screen overflow-x-clip flex flex-col">
+      {/* Filtros SVG globales para efecto Neón real (cristal y vibración de gas) */}
+      <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+        <defs>
+          <filter id="neon-glow-red" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" result="coloredBlur1" />
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur2" />
+            <feMerge>
+              <feMergeNode in="coloredBlur1" />
+              <feMergeNode in="coloredBlur2" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="neon-glow-white" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="coloredBlur1" />
+            <feGaussianBlur stdDeviation="2" result="coloredBlur2" />
+            <feMerge>
+              <feMergeNode in="coloredBlur1" />
+              <feMergeNode in="coloredBlur2" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="neon-wobble" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[var(--background)]/80 border-b border-[var(--border)]/50">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[var(--background)]/80">
         <div className="relative mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4 py-4">
           <div className="absolute inset-0 -left-[50vw] -right-[50vw] bg-[var(--background)]/80 backdrop-blur-xl -z-10 hidden lg:block" />
 
@@ -157,7 +185,7 @@ function HomePage() {
               <img
                 src="/logo-traga-nomas.png"
                 alt="Traga Nomas — Muerde sin respeto"
-                className="h-24 md:h-20 w-auto"
+                className="h-28 md:h-20 w-auto"
               />
             </a>
 
@@ -209,18 +237,47 @@ function HomePage() {
       <div className="hero-bg pb-12">
         <div className="mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4 md:px-8 lg:px-12">
           {/* Hero */}
-          <section className="mt-6 grid lg:grid-cols-2 gap-8 lg:items-center">
-            <div className="order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--secondary)]">
-                <span className="w-2 h-2 rounded-full bg-[var(--primary)] animate-pulse-dot" />
-                <span className="text-[10px] sm:text-xs font-medium tracking-widest uppercase text-[var(--muted-foreground)]">
+          <section className="mt-6 max-w-4xl">
+            <div>
+              <div className="relative inline-flex items-center gap-2 px-5 py-2 overflow-visible mb-5 md:mb-7">
+                {/* Borde neón real con SVG y filtros */}
+                <svg className="absolute -inset-[10px] w-[calc(100%+20px)] h-[calc(100%+20px)] pointer-events-none overflow-visible">
+                  <g filter="url(#neon-wobble)">
+                    {/* Brillo rojo exterior grueso */}
+                    <rect
+                      x="10" y="10"
+                      width="calc(100% - 20px)" height="calc(100% - 20px)"
+                      rx="8"
+                      fill="none"
+                      stroke="#ff1a1a"
+                      strokeWidth="3.5"
+                      filter="url(#neon-glow-red)"
+                      opacity="0.85"
+                    />
+                    {/* Borde interior blanco fino (núcleo de luz) */}
+                    <rect
+                      x="10" y="10"
+                      width="calc(100% - 20px)" height="calc(100% - 20px)"
+                      rx="8"
+                      fill="none"
+                      stroke="#fff"
+                      strokeWidth="1.0"
+                      opacity="0.95"
+                    />
+                  </g>
+                </svg>
+
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse-dot [filter:drop-shadow(0_0_3px_#ff1a1a)] shadow-[0_0_4px_#ff1a1a] z-10" />
+                <span className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-white [text-shadow:0_0_2px_#fff,0_0_6px_#ff1a1a] z-10">
                   Abierto ahora · Entrega 30-45 min
                 </span>
               </div>
 
-              <h1 className="mt-4 font-logo font-display font-extrabold leading-[0.85] text-[clamp(3.25rem,16vw,4.5rem)] md:text-7xl lg:text-9xl tracking-tight">
-                <span className="block text-[var(--lightforeground)]">Haz que</span>
-                <span className="block text-[var(--primary)]">valga</span>
+              <h1 className="mt-4 font-logo leading-[1.0] text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl tracking-tight">
+                <span className="block text-[var(--lightforeground)] mb-2 md:mb-3">Haz que</span>
+                <span className="relative inline-block text-[var(--primary)] pb-2">
+                  {"val<ga"}
+                </span>
               </h1>
 
               <p className="mt-4 max-w-md text-[var(--muted-foreground)] text-base md:text-lg leading-relaxed">
@@ -228,28 +285,113 @@ function HomePage() {
                 fundido y salsas de la casa. Sin congelados. Sin pretextos.
               </p>
 
-              <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
+              <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-4 sm:gap-8">
+                {/* Botón neón ROJO */}
                 <button
                   onClick={() => openDetail(featuredProduct)}
                   className={cn(
-                    "group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full",
+                    "group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-[16px]",
                     "font-display font-bold text-base tracking-wide uppercase",
-                    "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-cta",
-                    "hover:opacity-95 active:scale-[0.98] transition-all duration-200"
+                    "overflow-visible",
+
+                    // Fondo totalmente fuera
+                    "!bg-transparent hover:!bg-transparent active:!bg-transparent",
+
+                    // Quitar borde/halo negro del componente base
+                    "!outline-none !ring-0 !ring-offset-0 focus:!outline-none focus:!ring-0 focus:!ring-offset-0 focus-visible:!outline-none focus-visible:!ring-0 focus-visible:!ring-offset-0",
+
+                    // Texto neón (núcleo blanco con brillo rojo)
+                    "text-white",
+                    "[text-shadow:0_0_2px_#fff,0_0_8px_#ff1a1a,0_0_18px_#ff1a1a,0_0_30px_rgba(255,26,26,0.8)]",
+
+                    // Hover neón para texto
+                    "hover:[text-shadow:0_0_3px_#fff,0_0_12px_#ff1a1a,0_0_22px_#ff1a1a,0_0_35px_rgba(255,26,26,0.9)]",
+
+                    "active:scale-[0.98] transition-all duration-200"
                   )}
                 >
+                  {/* Borde neón real con SVG y filtros de vibración/cristal */}
+                  <svg className="absolute -inset-[12px] w-[calc(100%+24px)] h-[calc(100%+24px)] pointer-events-none overflow-visible">
+                    <g filter="url(#neon-wobble)">
+                      {/* Brillo rojo exterior grueso */}
+                      <rect
+                        x="12" y="12"
+                        width="calc(100% - 24px)" height="calc(100% - 24px)"
+                        rx="16"
+                        fill="none"
+                        stroke="#ff1a1a"
+                        strokeWidth="4"
+                        filter="url(#neon-glow-red)"
+                        className="opacity-90 group-hover:opacity-100 group-hover:stroke-[#ff2a2a] transition-all duration-200"
+                      />
+                      {/* Borde interior blanco fino (núcleo de luz) */}
+                      <rect
+                        x="12" y="12"
+                        width="calc(100% - 24px)" height="calc(100% - 24px)"
+                        rx="16"
+                        fill="none"
+                        stroke="#fff"
+                        strokeWidth="1.2"
+                        className="opacity-95 group-hover:opacity-100 transition-all duration-200"
+                      />
+                    </g>
+                  </svg>
+
                   Ordenar ahora
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform [filter:drop-shadow(0_0_1px_#fff)_drop-shadow(0_0_5px_#ff1a1a)_drop-shadow(0_0_12px_#ff1a1a)]" />
                 </button>
+
+                {/* Botón neón BLANCO */}
                 <a
                   href="#menu"
                   className={cn(
-                    "inline-flex items-center justify-center px-7 py-4 rounded-full",
+                    "group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-[16px]",
                     "font-display font-bold text-base tracking-wide uppercase",
-                    "bg-[var(--secondary)] text-[var(--foreground)] border border-[var(--border)]",
-                    "hover:border-[var(--primary)] active:scale-[0.98] transition-all duration-200"
+                    "overflow-visible",
+
+                    // Fondo totalmente fuera
+                    "!bg-transparent hover:!bg-transparent active:!bg-transparent",
+
+                    // Quitar borde/halo negro del componente base
+                    "!outline-none !ring-0 !ring-offset-0 focus:!outline-none focus:!ring-0 focus:!ring-offset-0",
+
+                    // Texto neón blanco
+                    "text-white",
+                    "[text-shadow:0_0_2px_#fff,0_0_8px_#ffffff,0_0_18px_rgba(255,255,255,0.6)]",
+
+                    // Hover neón blanco
+                    "hover:[text-shadow:0_0_3px_#fff,0_0_12px_#ffffff,0_0_22px_rgba(255,255,255,0.8)]",
+
+                    "active:scale-[0.98] transition-all duration-200"
                   )}
                 >
+                  {/* Borde neón real con SVG y filtros (Blanco) */}
+                  <svg className="absolute -inset-[12px] w-[calc(100%+24px)] h-[calc(100%+24px)] pointer-events-none overflow-visible">
+                    <g filter="url(#neon-wobble)">
+                      {/* Brillo blanco exterior grueso */}
+                      <rect
+                        x="12" y="12"
+                        width="calc(100% - 24px)" height="calc(100% - 24px)"
+                        rx="16"
+                        fill="none"
+                        stroke="#ffffff"
+                        strokeWidth="3.5"
+                        filter="url(#neon-glow-white)"
+                        className="opacity-80 group-hover:opacity-100 group-hover:stroke-white transition-all duration-200"
+                      />
+                      {/* Borde interior blanco fino (núcleo de luz) */}
+                      <rect
+                        x="12" y="12"
+                        width="calc(100% - 24px)" height="calc(100% - 24px)"
+                        rx="16"
+                        fill="none"
+                        stroke="#ffffff"
+                        strokeWidth="1.2"
+                        className="opacity-95 group-hover:opacity-100 transition-all duration-200"
+                      />
+                    </g>
+                  </svg>
+
                   Ver menú
                 </a>
               </div>
@@ -261,7 +403,7 @@ function HomePage() {
                   { icon: Clock, title: "30-45 min", sub: "Entrega estimada" },
                 ].map((stat) => (
                   <div key={stat.title} className="flex items-center gap-2">
-                    <stat.icon className="w-5 h-5 flex-shrink-0 text-[var(--primary)]" />
+                    <stat.icon className="w-6 h-6 flex-shrink-0 text-[#ff3333] [filter:drop-shadow(0_0_3px_#ff3333)_drop-shadow(0_0_8px_#d30e15)_drop-shadow(0_0_18px_rgba(211,14,21,0.6))]" />
                     <div className="leading-tight min-w-0">
                       <p className="font-display font-bold text-sm sm:text-base text-[var(--foreground)]">
                         {stat.title}
@@ -274,95 +416,35 @@ function HomePage() {
                 ))}
               </div>
             </div>
-
-            {/* Promo of the moment - Responsive 2/3-Layer Stack */}
-            <a
-              href="#menu"
-              className="order-1 lg:order-2 hero-composition group block"
-              aria-label={`Promoción: ${activePromo.title}`}
-            >
-              {/* Capa 2: Bandeja */}
-              <img
-                src="/images/food-combo.png"
-                alt="Bandeja"
-                className="layer-tray"
-              />
-
-              {/* Capa 3: Hamburguesa/Producto en promoción (rota dinámicamente) */}
-              {promos.map((promo, i) => (
-                <img
-                  key={promo.id}
-                  src={promo.image || "/placeholder.svg"}
-                  alt={promo.title}
-                  aria-hidden={i !== promoIndex}
-                  className={cn(
-                    "layer-foreground transition-opacity duration-700 ease-out",
-                    i === promoIndex ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              ))}
-
-              <div key={activePromo.id} className="absolute inset-x-0 bottom-0 p-6 z-10 animate-fade-in">
-                <p className="font-display font-bold text-sm tracking-widest uppercase text-[var(--primary-glow)]">
-                  {activePromo.tag}
-                </p>
-                <h3 className="mt-1 font-display font-extrabold text-3xl md:text-4xl tracking-tight text-[var(--foreground)] leading-none">
-                  {activePromo.title}
-                </h3>
-                <p className="mt-2 max-w-sm text-sm text-[var(--foreground)]/80 leading-relaxed">
-                  {activePromo.description}
-                </p>
-
-                {/* Progress dots */}
-                <div className="mt-4 flex items-center gap-1.5">
-                  {promos.map((promo, i) => (
-                    <button
-                      key={promo.id}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPromoIndex(i);
-                      }}
-                      aria-label={`Ver promo ${i + 1}`}
-                      className={cn(
-                        "h-1.5 rounded-full transition-all duration-300",
-                        i === promoIndex
-                          ? "w-8 bg-[var(--primary)]"
-                          : "w-1.5 bg-[var(--foreground)]/40 hover:bg-[var(--foreground)]/70"
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-            </a>
           </section>
         </div>
       </div>
 
       <div className="pb-32 md:pb-8">
-        <div className="mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4 md:px-8 lg:px-12">
-          {/* Promo Ticker */}
-          <div className="mt-6 -mx-4 overflow-hidden bg-[var(--primary)] py-2.5">
-            <div className="flex w-max animate-marquee whitespace-nowrap">
-              {[0, 1].map((dup) => (
-                <div key={dup} className="flex items-center" aria-hidden={dup === 1}>
-                  {[
-                    "Martes 2x1 en clásicas",
-                    "Envío gratis en pedidos +$250",
-                    "Abierto hasta las 11pm",
-                  ].map((promo) => (
-                    <span
-                      key={promo}
-                      className="flex items-center font-display font-bold text-sm tracking-widest uppercase text-[var(--primary-foreground)]"
-                    >
-                      {promo}
-                      <span className="mx-6 opacity-60">•</span>
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
+        {/* Promo Ticker — full bleed */}
+        <div className="mt-6 overflow-hidden bg-[var(--primary)] py-2.5 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+          <div className="flex w-max animate-marquee whitespace-nowrap">
+            {[0, 1].map((dup) => (
+              <div key={dup} className="flex items-center" aria-hidden={dup === 1}>
+                {[
+                  "Martes 2x1 en clásicas",
+                  "Envío gratis en pedidos +$250",
+                  "Abierto hasta las 11pm",
+                ].map((promo) => (
+                  <span
+                    key={promo}
+                    className="flex items-center font-display font-bold text-sm tracking-widest uppercase text-[var(--primary-foreground)]"
+                  >
+                    {promo}
+                    <span className="mx-6 opacity-60">•</span>
+                  </span>
+                ))}
+              </div>
+            ))}
           </div>
+        </div>
 
+        <div className="mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4 md:px-8 lg:px-12">
           {/* Menu Section — layers in from below: heading first, then nav, then cards */}
           <div ref={menuReveal.ref} id="menu" className="mt-16 scroll-mt-24">
             {/* Menu Heading (layer 1) */}
