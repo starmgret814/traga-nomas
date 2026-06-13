@@ -34,7 +34,7 @@ export const products: Product[] = [
       "Carne 200g, queso americano, lechuga, tomate, cebolla, pepinillos y salsa especial de la casa.",
     price: 89,
     category: "Hamburguesas",
-    image: "/images/la-patrona.png",
+    image: "/images/xdxd.webp",
     badge: "POPULAR",
   },
   {

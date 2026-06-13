@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Search, ShoppingBag, MessageCircle, MapPin, Star, Truck, Clock, ArrowRight, Flame } from "lucide-react";
+import { Search, ShoppingBag, MessageCircle, MapPin, Star, Truck, Clock, ArrowRight, Flame, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ProductCard } from "@/components/food/ProductCard";
 import { ProductDetailSheet } from "@/components/food/ProductDetailSheet";
@@ -29,6 +29,27 @@ function lineKey(productId: string, extras: Extra[]): string {
 }
 
 function HomePage() {
+  // Carousel of burger products
+  const carouselBurgers = useMemo(() => {
+    return products.filter((p) => p.category === "Hamburguesas");
+  }, []);
+
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setActiveImgIndex((prev) => (prev + 1) % carouselBurgers.length);
+  }, [carouselBurgers.length]);
+
+  const prevSlide = useCallback(() => {
+    setActiveImgIndex((prev) => (prev - 1 + carouselBurgers.length) % carouselBurgers.length);
+  }, [carouselBurgers.length]);
+
+  useEffect(() => {
+    const id = setInterval(nextSlide, 5000);
+    return () => clearInterval(id);
+  }, [nextSlide]);
+
+  const activeBurger = carouselBurgers[activeImgIndex];
   const [activeCat, setActiveCat] = useState<Category>(categories[0]);
   const [query, setQuery] = useState("");
   const [cart, setCart] = useState<CartLine[]>([]);
@@ -177,7 +198,7 @@ function HomePage() {
 
       {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-[var(--background)]/80">
-        <div className="relative mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4 py-4">
+        <div className="relative mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4">
           <div className="absolute inset-0 -left-[50vw] -right-[50vw] bg-[var(--background)]/80 backdrop-blur-xl -z-10 hidden lg:block" />
 
           <div className="flex items-center justify-between gap-4">
@@ -237,8 +258,9 @@ function HomePage() {
       <div className="hero-bg pb-12">
         <div className="mx-auto max-w-md md:max-w-3xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] px-4 md:px-8 lg:px-12">
           {/* Hero */}
-          <section className="mt-6 max-w-4xl">
-            <div>
+          <section className="mt-6 flex flex-col lg:flex-row gap-12 items-center justify-between max-w-none">
+            <div className="flex-1 max-w-xl lg:max-w-2xl">
+
               <div className="relative inline-flex items-center gap-2 px-5 py-2 overflow-visible mb-5 md:mb-7 bg-[#ff1a1a]/12 backdrop-blur-sm rounded-[8px]">
                 {/* Borde neón real con SVG y filtros */}
                 <svg className="absolute -inset-[10px] w-[calc(100%+20px)] h-[calc(100%+20px)] pointer-events-none overflow-visible">
@@ -419,6 +441,81 @@ function HomePage() {
                       </p>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 2. La segunda columna - Carrusel de Hamburguesas */}
+            <div className="flex-1 w-full lg:max-w-2xl flex flex-col items-center justify-center relative min-h-[350px] lg:min-h-[450px] mt-8 lg:mt-0 lg:-translate-x-8 xl:-translate-x-16 2xl:-translate-x-24 lg:scale-105 xl:scale-115 2xl:scale-120 transition-all duration-300">
+              {/* Contenedor del Carrusel con la composición predefinida */}
+              <div className="hero-composition w-full relative">
+                {/* Hamburguesas del carrusel */}
+                {carouselBurgers.map((burger, idx) => (
+                  <img
+                    key={burger.id}
+                    src={burger.image}
+                    alt={burger.name}
+                    className={cn(
+                      "layer-foreground transition-all duration-750 ease-in-out cursor-pointer !bottom-[-4%] !w-[100%] !max-h-[90%]",
+                      idx === activeImgIndex
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-90 pointer-events-none"
+                    )}
+                    onClick={() => openDetail(burger)}
+                  />
+                ))}
+
+                {/* Flecha Izquierda */}
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-2 top-[45%] -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-[#ff1a1a]/60 bg-black/60 hover:bg-[#ff1a1a]/20 flex items-center justify-center text-white transition-all duration-300 shadow-[0_0_15px_rgba(255,26,26,0.3)] active:scale-95"
+                  aria-label="Anterior"
+                >
+                  <ChevronLeft className="w-6 h-6 text-white" />
+                </button>
+
+                {/* Flecha Derecha */}
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-2 top-[45%] -translate-y-1/2 z-20 w-11 h-11 rounded-full border border-[#ff1a1a]/60 bg-black/60 hover:bg-[#ff1a1a]/20 flex items-center justify-center text-white transition-all duration-300 shadow-[0_0_15px_rgba(255,26,26,0.3)] active:scale-95"
+                  aria-label="Siguiente"
+                >
+                  <ChevronRight className="w-6 h-6 text-white" />
+                </button>
+
+                {/* Tarjeta de Información (Abajo a la izquierda, estilo glassmorphic del mockup) */}
+                {activeBurger && (
+                  <div
+                    onClick={() => openDetail(activeBurger)}
+                    className="absolute bottom-[8%] left-[2%] z-20 max-w-[200px] sm:max-w-[240px] p-3 bg-black/85 backdrop-blur-md border border-[#2a241c] hover:border-[var(--primary)] rounded-2xl shadow-[0_12px_36px_rgba(0,0,0,0.9)] text-left animate-fade-in cursor-pointer transition-colors duration-300"
+                  >
+                    <h4 className="font-display font-bold text-base sm:text-lg text-[var(--lightforeground)] tracking-wide uppercase leading-tight">
+                      {activeBurger.name}
+                    </h4>
+                    <p className="mt-1 text-[10px] sm:text-[11px] text-[var(--muted-foreground)] leading-relaxed line-clamp-3">
+                      {activeBurger.description}
+                    </p>
+                    <p className="mt-2 font-display font-extrabold text-lg sm:text-xl text-[var(--primary)] leading-none">
+                      ${activeBurger.price}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Controles del Carrusel (Puntos) */}
+              <div className="flex items-center gap-2 mt-4 z-10">
+                {carouselBurgers.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImgIndex(idx)}
+                    className={cn(
+                      "w-2.5 h-2.5 rounded-full transition-all duration-300",
+                      idx === activeImgIndex
+                        ? "bg-[var(--primary)] w-6"
+                        : "bg-[#2a241c] hover:bg-[var(--muted-foreground)]"
+                    )}
+                    aria-label={`Ver imagen ${idx + 1}`}
+                  />
                 ))}
               </div>
             </div>
