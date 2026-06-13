@@ -168,7 +168,7 @@ function HomePage() {
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <filter id="neon-wobble" x="-10%" y="-10%" width="120%" height="120%">
+          <filter id="neon-wobble" x="-50%" y="-50%" width="200%" height="200%">
             <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
           </filter>
@@ -239,10 +239,10 @@ function HomePage() {
           {/* Hero */}
           <section className="mt-6 max-w-4xl">
             <div>
-              <div className="relative inline-flex items-center gap-2 px-5 py-2 overflow-visible mb-5 md:mb-7">
+              <div className="relative inline-flex items-center gap-2 px-5 py-2 overflow-visible mb-5 md:mb-7 bg-[#ff1a1a]/12 backdrop-blur-sm rounded-[8px]">
                 {/* Borde neón real con SVG y filtros */}
                 <svg className="absolute -inset-[10px] w-[calc(100%+20px)] h-[calc(100%+20px)] pointer-events-none overflow-visible">
-                  <g filter="url(#neon-wobble)">
+                  <g>
                     {/* Brillo rojo exterior grueso */}
                     <rect
                       x="10" y="10"
@@ -276,11 +276,11 @@ function HomePage() {
               <h1 className="mt-4 font-logo leading-[1.0] text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl tracking-tight">
                 <span className="block text-[var(--lightforeground)] mb-2 md:mb-3">Haz que</span>
                 <span className="relative inline-block text-[var(--primary)] pb-2">
-                  {"val<ga"}
+                  {"valga"}
                 </span>
               </h1>
 
-              <p className="mt-4 max-w-md text-[var(--muted-foreground)] text-base md:text-lg leading-relaxed">
+              <p className="mt-4 max-w-md text-[var(--lightforeground)] font-medium text-base md:text-lg leading-relaxed opacity-90">
                 Smash burgers hechas con carne de res 100% fresca, queso americano
                 fundido y salsas de la casa. Sin congelados. Sin pretextos.
               </p>
@@ -290,7 +290,7 @@ function HomePage() {
                 <button
                   onClick={() => openDetail(featuredProduct)}
                   className={cn(
-                    "group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-[16px]",
+                    "group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-[16px] cursor-pointer",
                     "font-display font-bold text-base tracking-wide uppercase",
                     "overflow-visible",
 
@@ -307,12 +307,15 @@ function HomePage() {
                     // Hover neón para texto
                     "hover:[text-shadow:0_0_3px_#fff,0_0_12px_#ff1a1a,0_0_22px_#ff1a1a,0_0_35px_rgba(255,26,26,0.9)]",
 
-                    "active:scale-[0.98] transition-all duration-200"
+                    "active:scale-[0.98] transition-[transform,text-shadow] duration-200"
                   )}
                 >
+                  {/* Resplandor rojo ambiente sutil de fondo */}
+                  <div className="absolute inset-0 bg-[#ff1a1a]/15 group-hover:bg-[#ff1a1a]/28 blur-xl rounded-[16px] pointer-events-none -z-10 transition-[background-color] duration-300" />
+
                   {/* Borde neón real con SVG y filtros de vibración/cristal */}
                   <svg className="absolute -inset-[12px] w-[calc(100%+24px)] h-[calc(100%+24px)] pointer-events-none overflow-visible">
-                    <g filter="url(#neon-wobble)">
+                    <g>
                       {/* Brillo rojo exterior grueso */}
                       <rect
                         x="12" y="12"
@@ -322,7 +325,7 @@ function HomePage() {
                         stroke="#ff1a1a"
                         strokeWidth="4"
                         filter="url(#neon-glow-red)"
-                        className="opacity-90 group-hover:opacity-100 group-hover:stroke-[#ff2a2a] transition-all duration-200"
+                        className="opacity-75 group-hover:opacity-100 group-hover:stroke-[#ff4d4d] transition-all duration-200"
                       />
                       {/* Borde interior blanco fino (núcleo de luz) */}
                       <rect
@@ -331,8 +334,8 @@ function HomePage() {
                         rx="16"
                         fill="none"
                         stroke="#fff"
-                        strokeWidth="1.2"
-                        className="opacity-95 group-hover:opacity-100 transition-all duration-200"
+                        strokeWidth="1.0"
+                        className="opacity-80 group-hover:opacity-100 transition-opacity duration-200"
                       />
                     </g>
                   </svg>
@@ -345,7 +348,7 @@ function HomePage() {
                 <a
                   href="#menu"
                   className={cn(
-                    "group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-[16px]",
+                    "group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-[16px] cursor-pointer",
                     "font-display font-bold text-base tracking-wide uppercase",
                     "overflow-visible",
 
@@ -357,17 +360,20 @@ function HomePage() {
 
                     // Texto neón blanco
                     "text-white",
-                    "[text-shadow:0_0_2px_#fff,0_0_8px_#ffffff,0_0_18px_rgba(255,255,255,0.6)]",
+                    "[text-shadow:0_0_8px_rgba(255,255,255,0.45),0_0_18px_rgba(255,255,255,0.18)]",
 
                     // Hover neón blanco
-                    "hover:[text-shadow:0_0_3px_#fff,0_0_12px_#ffffff,0_0_22px_rgba(255,255,255,0.8)]",
+                    "hover:[text-shadow:0_0_10px_rgba(255,255,255,0.6),0_0_20px_rgba(255,255,255,0.3)]",
 
-                    "active:scale-[0.98] transition-all duration-200"
+                    "active:scale-[0.98] transition-[transform,text-shadow] duration-200"
                   )}
                 >
+                  {/* Resplandor rojo ambiente sutil de fondo para hacer juego */}
+                  <div className="absolute inset-0 bg-[#ff1a1a]/6 group-hover:bg-[#ff1a1a]/12 blur-xl rounded-[16px] pointer-events-none -z-10 transition-[background-color] duration-300" />
+
                   {/* Borde neón real con SVG y filtros (Blanco) */}
                   <svg className="absolute -inset-[12px] w-[calc(100%+24px)] h-[calc(100%+24px)] pointer-events-none overflow-visible">
-                    <g filter="url(#neon-wobble)">
+                    <g>
                       {/* Brillo blanco exterior grueso */}
                       <rect
                         x="12" y="12"
@@ -375,9 +381,9 @@ function HomePage() {
                         rx="16"
                         fill="none"
                         stroke="#ffffff"
-                        strokeWidth="3.5"
+                        strokeWidth="2.5"
                         filter="url(#neon-glow-white)"
-                        className="opacity-80 group-hover:opacity-100 group-hover:stroke-white transition-all duration-200"
+                        className="opacity-40 group-hover:opacity-70 transition-opacity duration-200"
                       />
                       {/* Borde interior blanco fino (núcleo de luz) */}
                       <rect
@@ -386,8 +392,8 @@ function HomePage() {
                         rx="16"
                         fill="none"
                         stroke="#ffffff"
-                        strokeWidth="1.2"
-                        className="opacity-95 group-hover:opacity-100 transition-all duration-200"
+                        strokeWidth="1.0"
+                        className="opacity-60 group-hover:opacity-80 transition-opacity duration-200"
                       />
                     </g>
                   </svg>
@@ -403,12 +409,12 @@ function HomePage() {
                   { icon: Clock, title: "30-45 min", sub: "Entrega estimada" },
                 ].map((stat) => (
                   <div key={stat.title} className="flex items-center gap-2">
-                    <stat.icon className="w-6 h-6 flex-shrink-0 text-[#ff3333] [filter:drop-shadow(0_0_3px_#ff3333)_drop-shadow(0_0_8px_#d30e15)_drop-shadow(0_0_18px_rgba(211,14,21,0.6))]" />
+                    <stat.icon className="w-6 h-6 flex-shrink-0 text-white [filter:drop-shadow(0_0_1px_#fff)_drop-shadow(0_0_5px_#ff1a1a)_drop-shadow(0_0_12px_#ff1a1a)]" />
                     <div className="leading-tight min-w-0">
-                      <p className="font-display font-bold text-sm sm:text-base text-[var(--foreground)]">
+                      <p className="font-display font-bold text-sm sm:text-base text-white">
                         {stat.title}
                       </p>
-                      <p className="text-[11px] sm:text-xs text-[var(--muted-foreground)] truncate">
+                      <p className="text-[11px] sm:text-xs text-white/80 font-medium truncate">
                         {stat.sub}
                       </p>
                     </div>
@@ -458,7 +464,7 @@ function HomePage() {
                 <p className="font-display font-bold text-sm tracking-[0.25em] uppercase text-[var(--accent)]">
                   Lo que tenemos
                 </p>
-                <h2 className="font-logo mt-6 font-extrabold text-5xl md:text-6xl tracking-tight text-[var(--lightforeground)] leading-[0.85]">
+                <h2 className="font-logo mt-6 font-extrabold text-5xl md:text-6xl tracking-tight text-[var(--lightforeground)] leading-[1.15] py-2">
                   Nuestro menu
                 </h2>
               </div>
@@ -505,7 +511,7 @@ function HomePage() {
                       {group.items.length} platos
                     </span>
                   </div>
-                  <div className="font-montserrat font-medium grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                  <div className="font-montserrat font-medium grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
                     {group.items.map((product, idx) => (
                       <ProductCard
                         key={product.id}
