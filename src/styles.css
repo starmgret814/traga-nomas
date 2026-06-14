@@ -37,6 +37,10 @@
   font-family: "Road Rage", sans-serif !important;
 }
 
+.tracking-logo {
+  letter-spacing: 0.15em !important;
+}
+
 @theme {
   --font-display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -175,14 +179,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button,
+a,
+[role="button"] {
+  cursor: pointer;
+}
+
 .hero-bg {
   background:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 65%, var(--background) 100%),
-    url('/main-background.png') no-repeat;
-  background-size: cover;
-  background-position: 50% 45%;
-  /* Centrado para móvil */
+    url('/main-mobile-background.webp') no-repeat;
+  background-size: 100% auto;
+  background-position: center -30px;
+  /* Desplazado hacia arriba para móvil */
   transition: background-position 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .hero-bg {
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 65%, var(--background) 100%),
+      url('/main-background.webp') no-repeat;
+    background-size: cover;
+    background-position: 50% 45%;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -379,6 +398,7 @@ h6 {
   filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.6));
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 
 /* Animación de hover en el contenedor */
 .hero-composition:hover .layer-foreground {

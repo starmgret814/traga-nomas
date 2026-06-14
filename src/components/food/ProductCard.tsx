@@ -37,7 +37,7 @@ export const ProductCard = memo(function ProductCard({
       )}
     >
       {/* Image */}
-      <div className="relative aspect-square w-full overflow-hidden bg-black/20">
+      <div className="relative aspect-[16/10] sm:aspect-square w-full overflow-hidden bg-black/20">
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
@@ -69,18 +69,18 @@ export const ProductCard = memo(function ProductCard({
       </div>
 
       {/* Body */}
-      <div className="flex flex-col flex-1 p-4 pt-3">
-        <h3 className="font-logo font-bold text-2xl tracking-wide uppercase text-[var(--card-foreground)] leading-tight">
+      <div className="flex flex-col flex-1 p-3 sm:p-4 pt-2.5 sm:pt-3">
+        <h3 className="font-logo tracking-logo font-bold text-xl sm:text-2xl uppercase text-[var(--card-foreground)] leading-tight">
           {product.name}
         </h3>
         <p className="mt-1.5 text-sm text-[var(--muted-foreground)] leading-relaxed line-clamp-2 flex-1">
           {product.description}
         </p>
 
-        <div className="mt-4 flex items-end justify-between gap-2">
-          <p className="font-display font-extrabold text-2xl text-[var(--primary)] leading-none">
+        <div className="mt-3 sm:mt-4 flex items-end justify-between gap-2">
+          <p className="font-display font-extrabold text-xl sm:text-2xl text-[var(--primary)] leading-none">
             ${product.price}
-            <span className="ml-1 text-xs font-semibold text-[var(--muted-foreground)] align-baseline">
+            <span className="ml-1 text-[10px] sm:text-xs font-semibold text-[var(--muted-foreground)] align-baseline">
               USD
             </span>
           </p>
@@ -88,42 +88,42 @@ export const ProductCard = memo(function ProductCard({
           <div onClick={(e) => e.stopPropagation()}>
             {qty === 0 ? (
               <button
-                onClick={onQuickAdd}
+                onClick={onOpen}
                 className={cn(
-                  "flex items-center justify-center w-11 h-11 rounded-full",
+                  "flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-full",
                   "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-cta",
                   "hover:opacity-90 active:scale-95 transition-all duration-200"
                 )}
                 aria-label={`Agregar ${product.name} al carrito`}
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-4 h-4 sm:w-5 h-5" />
               </button>
             ) : (
-              <div className="flex items-center gap-1.5 bg-[var(--secondary)] rounded-full p-1 animate-scale-in">
+              <div className="flex items-center gap-1 sm:gap-1.5 bg-[var(--secondary)] rounded-full p-1 animate-scale-in">
                 <button
                   onClick={onQuickRemove}
                   className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-full",
+                    "flex items-center justify-center w-7 h-7 sm:w-8 h-8 rounded-full",
                     "bg-[var(--muted)] text-[var(--foreground)]",
                     "hover:bg-[var(--border)] active:scale-95 transition-[background-color,transform] duration-200"
                   )}
                   aria-label={`Quitar un ${product.name}`}
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="w-3.5 h-3.5 sm:w-4 h-4" />
                 </button>
-                <span className="w-6 text-center font-display font-bold text-[var(--foreground)]">
+                <span className="w-5 sm:w-6 text-center font-display font-bold text-sm sm:text-base text-[var(--foreground)]">
                   {qty}
                 </span>
                 <button
                   onClick={onQuickAdd}
                   className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-full",
+                    "flex items-center justify-center w-7 h-7 sm:w-8 h-8 rounded-full",
                     "bg-[var(--primary)] text-[var(--primary-foreground)]",
                     "hover:opacity-90 active:scale-95 transition-[opacity,transform] duration-200"
                   )}
                   aria-label={`Agregar otro ${product.name}`}
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5 sm:w-4 h-4" />
                 </button>
               </div>
             )}

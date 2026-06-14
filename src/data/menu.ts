@@ -34,7 +34,7 @@ export const products: Product[] = [
       "Carne 200g, queso americano, lechuga, tomate, cebolla, pepinillos y salsa especial de la casa.",
     price: 89,
     category: "Hamburguesas",
-    image: "/images/xdxd.webp",
+    image: "/images/burger-1.png",
     badge: "POPULAR",
   },
   {
@@ -44,7 +44,7 @@ export const products: Product[] = [
       "Dos carnes smash 120g c/u, doble queso americano fundido, cebolla crispy, pepinillos y salsa smash.",
     price: 119,
     category: "Hamburguesas",
-    image: "/images/salchipapa-malcriada.png",
+    image: "/images/burger-2.png",
     badge: "TOP",
   },
   {
@@ -54,7 +54,7 @@ export const products: Product[] = [
       "Carne 200g, triple bacon crujiente, queso cheddar, cebolla caramelizada, lechuga y jitomate.",
     price: 129,
     category: "Hamburguesas",
-    image: "/images/la-trans.png",
+    image: "/images/burger-3.png",
     badge: "NUEVO",
   },
   {
@@ -64,7 +64,7 @@ export const products: Product[] = [
       "Nuestra burger signature: doble carne 150g c/u, triple queso, bacon, aguacate, jitomate y salsa secreta.",
     price: 159,
     category: "Hamburguesas",
-    image: "/images/la-golosa.png",
+    image: "/images/burger-4.png",
     badge: "SIGNATURE",
   },
 

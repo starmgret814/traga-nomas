@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Plus, Minus } from "lucide-react";
 import {
   Sheet,
@@ -10,7 +10,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
+import { cn, hasSuspiciousWords } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Product, Extra } from "@/data/menu";
 import { extras as allExtras } from "@/data/menu";
@@ -19,7 +19,11 @@ interface ProductDetailSheetProps {
   product: Product | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAddToCart: (product: Product, extras: Extra[], qty: number) => void;
+  onAddToCart: (product: Product, extras: Extra[], qty: number, note?: string) => void;
+  isEditing?: boolean;
+  initialExtras?: Extra[];
+  initialQty?: number;
+  initialNote?: string;
 }
 
 export function ProductDetailSheet({
@@ -27,15 +31,44 @@ export function ProductDetailSheet({
   open,
   onOpenChange,
   onAddToCart,
+  isEditing = false,
+  initialExtras = [],
+  initialQty = 1,
+  initialNote = "",
 }: ProductDetailSheetProps) {
   const isMobile = useIsMobile();
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
   const [qty, setQty] = useState(1);
+  const [note, setNote] = useState("");
+
+  const showProductWarning = useMemo(() => hasSuspiciousWords(note), [note]);
+
+  const isOpenedRef = useRef(false);
+
+  useEffect(() => {
+    if (open) {
+      if (!isOpenedRef.current && product) {
+        isOpenedRef.current = true;
+        if (isEditing) {
+          setSelectedExtras(initialExtras.map((e) => e.id));
+          setQty(initialQty);
+          setNote(initialNote);
+        } else {
+          setSelectedExtras([]);
+          setQty(1);
+          setNote("");
+        }
+      }
+    } else {
+      isOpenedRef.current = false;
+    }
+  }, [open, product, isEditing, initialExtras, initialQty, initialNote]);
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       setSelectedExtras([]);
       setQty(1);
+      setNote("");
     }
     onOpenChange(isOpen);
   };
@@ -63,7 +96,7 @@ export function ProductDetailSheet({
   const handleAddToCart = () => {
     if (!product) return;
     const extras = allExtras.filter((e) => selectedExtras.includes(e.id));
-    onAddToCart(product, extras, qty);
+    onAddToCart(product, extras, qty, note);
     handleOpenChange(false);
   };
 
@@ -86,17 +119,17 @@ export function ProductDetailSheet({
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-6">
           <SheetHeader className="sr-only">
             <SheetTitle>{product.name}</SheetTitle>
             <SheetDescription>Product details and customization</SheetDescription>
           </SheetHeader>
 
-          <div className="mt-4 rounded-3xl bg-[var(--muted)] p-4 overflow-hidden">
+          <div className="mt-4 rounded-3xl bg-[var(--muted)] p-2 sm:p-4 overflow-hidden">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full aspect-[4/3] object-cover rounded-2xl"
+              className="w-full aspect-[16/10] sm:aspect-[4/3] object-cover rounded-2xl"
             />
           </div>
 
@@ -112,32 +145,32 @@ export function ProductDetailSheet({
             </p>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <h3 className="font-display font-semibold text-lg text-[var(--foreground)] mb-4">
               Adicionales
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-2.5 sm:space-y-3">
               {allExtras.map((extra) => {
                 const isSelected = selectedExtras.includes(extra.id);
                 return (
                   <label
                     key={extra.id}
                     className={cn(
-                      "flex items-center gap-4 p-4 rounded-2xl cursor-pointer",
-                      "border-2 transition-all duration-200",
+                      "flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl cursor-pointer",
+                      "border transition-all duration-200",
                       isSelected
-                        ? "border-[var(--primary)] bg-[var(--primary)]/5"
-                        : "border-[var(--border)] bg-[var(--card)]"
+                        ? "border-[var(--primary)] bg-[var(--primary)]/10 shadow-[0_0_12px_rgba(211,14,21,0.15)]"
+                        : "border-[var(--border)] bg-[var(--card)] hover:border-[var(--muted-foreground)]/40 hover:bg-[var(--secondary)]/40"
                     )}
                   >
                     <Checkbox
                       checked={isSelected}
                       onCheckedChange={() => toggleExtra(extra.id)}
                     />
-                    <span className="flex-1 font-medium text-[var(--foreground)]">
+                    <span className="flex-1 font-medium text-[var(--foreground)] text-sm sm:text-base">
                       {extra.name}
                     </span>
-                    <span className="text-[var(--muted-foreground)]">
+                    <span className="text-[var(--muted-foreground)] text-sm sm:text-base">
                       +${extra.price.toFixed(2)}
                     </span>
                   </label>
@@ -146,8 +179,8 @@ export function ProductDetailSheet({
             </div>
           </div>
 
-          <div className="mt-8">
-            <h3 className="font-display font-semibold text-lg text-[var(--foreground)] mb-4">
+          <div className="mt-6 sm:mt-8">
+            <h3 className="font-display font-semibold text-lg text-[var(--foreground)] mb-3">
               Cantidad
             </h3>
             <div className="inline-flex items-center gap-4 bg-[var(--secondary)] rounded-full px-2 py-2">
@@ -182,9 +215,33 @@ export function ProductDetailSheet({
               </button>
             </div>
           </div>
+
+          <div className="mt-6 sm:mt-8">
+            <h3 className="font-display font-semibold text-lg text-[var(--foreground)] mb-1">
+              Indicaciones especiales
+            </h3>
+            <p className="text-[11px] text-[var(--muted-foreground)] mb-2">
+              ⚠️ No escribas adicionales con costo aquí (como queso o tocino extra).
+            </p>
+            <textarea
+              placeholder="Ej. Sin cebolla, cremas aparte, bien cocido... (No escribir adicionales con costo aquí)"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              className="w-full bg-[var(--secondary)] text-[var(--foreground)] border border-[var(--border)] rounded-2xl p-3 text-sm focus:outline-none focus:border-[var(--primary)] resize-none"
+              rows={2}
+            />
+            {showProductWarning && (
+              <p className="mt-1.5 text-xs text-amber-500 font-medium">
+                ⚠️ Parece que estás pidiendo un adicional. Recuerda seleccionarlo desde las opciones del producto para que el precio se calcule correctamente.
+              </p>
+            )}
+            <p className="mt-1.5 text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Usa este espacio para indicaciones como sin cebolla, poca salsa o cremas aparte. Los adicionales con costo deben seleccionarse desde las opciones del producto.
+            </p>
+          </div>
         </div>
 
-        <div className="sticky bottom-0 px-6 py-4 bg-[var(--background)] border-t border-[var(--border)] safe-area-pb">
+        <div className="sticky bottom-0 px-4 sm:px-6 py-4 bg-[var(--background)] border-t border-[var(--border)] safe-area-pb">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[var(--muted-foreground)]">Total</span>
             <span className="font-display font-bold text-2xl text-[var(--foreground)]">
@@ -200,7 +257,7 @@ export function ProductDetailSheet({
               "active:scale-[0.98]"
             )}
           >
-            Agregar al carrito · ${total.toFixed(2)}
+            {isEditing ? "Guardar cambios" : "Agregar al carrito"} · ${total.toFixed(2)}
           </button>
         </div>
       </SheetContent>
