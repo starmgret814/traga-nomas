@@ -9,8 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ControlPanelTragaNomas99RouteImport } from './routes/control-panel-traga-nomas-99'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ControlPanelTragaNomas99Route =
+  ControlPanelTragaNomas99RouteImport.update({
+    id: '/control-panel-traga-nomas-99',
+    path: '/control-panel-traga-nomas-99',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +26,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/control-panel-traga-nomas-99': typeof ControlPanelTragaNomas99Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/control-panel-traga-nomas-99': typeof ControlPanelTragaNomas99Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/control-panel-traga-nomas-99': typeof ControlPanelTragaNomas99Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/control-panel-traga-nomas-99'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/control-panel-traga-nomas-99'
+  id: '__root__' | '/' | '/control-panel-traga-nomas-99'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ControlPanelTragaNomas99Route: typeof ControlPanelTragaNomas99Route
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/control-panel-traga-nomas-99': {
+      id: '/control-panel-traga-nomas-99'
+      path: '/control-panel-traga-nomas-99'
+      fullPath: '/control-panel-traga-nomas-99'
+      preLoaderRoute: typeof ControlPanelTragaNomas99RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +71,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ControlPanelTragaNomas99Route: ControlPanelTragaNomas99Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
